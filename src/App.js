@@ -1,24 +1,18 @@
-import logo from './logo.svg';
 import './App.css';
+import Scaffold from './scaffold/Scaffold';
+import { BrowserRouter } from 'react-router-dom';
+import { themeDark, themeLight } from 'theme/Theme';
+import { MuiThemeProvider } from "@material-ui/core/styles";
+import { CssBaseline } from "@material-ui/core";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <MuiThemeProvider theme={true ? themeLight : themeDark}>
+      <CssBaseline />
+      <BrowserRouter>
+        <Scaffold></Scaffold>
+      </BrowserRouter>
+    </MuiThemeProvider>
   );
 }
 
