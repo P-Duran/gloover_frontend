@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 const mockChart = (color: string) => {
   return (
-    <Grid container alignItems="baseline" xs={12}>
+    <Grid container alignItems="baseline">
       {new Array(10).fill(1).map((item, index) => (
         <Grid item key={item + index}>
           <Box
@@ -64,13 +64,12 @@ interface Props {
 }
 export const StatsCard = ({
   title = "Title",
-  amount = 100,
-  percentage = 0.1,
+  amount = 0,
+  percentage = 0,
   size = 3,
 }: Props) => {
   const classes = useStyles();
   const theme = useTheme();
-
   return (
     <Card xs={12} sm={6} md={size}>
       <Grid

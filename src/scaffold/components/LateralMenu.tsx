@@ -2,7 +2,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import { Box, makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import { useLocation, useHistory } from "react-router-dom";
 import FeatherIcon from "feather-icons-react";
 import { useTheme } from "@material-ui/core/styles";
@@ -23,6 +23,7 @@ interface MenuItem {
   label: string;
   icon: string;
   route: string;
+  selectionRoutes?: string[];
 }
 
 const menuItems: MenuItem[] = [
@@ -35,6 +36,7 @@ const menuItems: MenuItem[] = [
     label: "Products",
     icon: "package",
     route: "/products",
+    selectionRoutes: ["/products", "/product"],
   },
   {
     label: "Reviews",
@@ -45,6 +47,11 @@ const menuItems: MenuItem[] = [
     label: "Statistics",
     icon: "bar-chart",
     route: "/statistics",
+  },
+  {
+    label: "Model",
+    icon: "git-merge",
+    route: "/model",
   },
 ];
 
@@ -65,33 +72,36 @@ export function LateralMenu() {
       <List>
         {menuItems.map((menuItem) => (
           <motion.div
-            whileHover={{ scale: 1.05}}
+            key={menuItem.label}
+            whileHover={{
+              scale: location.pathname === menuItem.route ? 1 : 1.05,
+            }}
             whileTap={{ scale: 0.9 }}
           >
             <ListItem
               button
-              key={menuItem.label}
-              selected={location.pathname === menuItem.route}
+              selected={
+                menuItem.selectionRoutes
+                  ? menuItem.selectionRoutes.includes(location.pathname)
+                  : location.pathname === menuItem.route
+              }
               onClick={() => handleClick(menuItem.route)}
             >
               <ListItemIcon>
                 <FeatherIcon
                   icon={menuItem.icon}
                   color={
-                    location.pathname === menuItem.route
-                      ? theme.palette.primary.main
+                    (
+                      menuItem.selectionRoutes
+                        ? menuItem.selectionRoutes.includes(location.pathname)
+                        : location.pathname === menuItem.route
+                    )
+                      ? theme.palette.common.white
                       : theme.palette
                   }
                 />
               </ListItemIcon>
-              <ListItemText
-                disableTypography
-                primary={
-                  <Box fontWeight={500} fontSize={16}>
-                    {menuItem.label}
-                  </Box>
-                }
-              />
+              <ListItemText>{menuItem.label}</ListItemText>
             </ListItem>
           </motion.div>
         ))}

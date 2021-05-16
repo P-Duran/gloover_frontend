@@ -11,16 +11,14 @@ import {
   Toolbar,
   Box,
   CardMedia,
+  Collapse,
 } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { AnimatedTooltip } from "components/tootltip/AnimatedTooltip";
-import {
-  capitalizeFirstLetter,
-  ellipsisText,
-  isImage,
-} from "utils/StringUtils";
+import { titleCase, ellipsisText, isImage } from "utils/StringUtils";
 import { IconButton } from "@material-ui/core";
 import FeatherIcon from "feather-icons-react";
+import { RowData, TableData } from "types/TableCardTypes";
 
 const useStyles = makeStyles((theme) => ({
   chart: {
@@ -35,10 +33,13 @@ const useStyles = makeStyles((theme) => ({
       height: 400,
     },
   },
-  table: {},
+  table: {
+    width: "100%",
+  },
 }));
 const StyledTableCell = withStyles((theme) => ({
   head: {
+    whiteSpace: "nowrap",
     backgroundColor: "rgb(244, 246, 248)",
     color: theme.palette.common.black,
     fontWeight: 550,
@@ -53,22 +54,42 @@ const StyledTableCell = withStyles((theme) => ({
 const StyledTableRow = withStyles((theme) => ({
   root: {
     backgroundColor: "transparent",
+    borderLeft: "6px solid transparent",
     border: "none",
+    "&:hover": {
+      borderLeft: "6px solid rgb(117, 117, 253, 0.4)",
+      cursor: "pointer",
+    },
   },
 }))(TableRow);
 
 interface Props {
-  data: any[];
+  data: TableData;
   title: string;
+  columnToShow?: string[];
+  onClick?: (e: RowData) => void;
 }
-export const TableCard = ({ data, title }: Props) => {
+export const TableCard = ({
+  data,
+  title,
+  columnToShow,
+  onClick = () => null,
+}: Props) => {
   const [header, setHeader] = useState<string[]>([]);
   const classes = useStyles();
 
-  const extractHeader = (data: any[]) => {
+  const extractHeader = (
+    data: TableData,
+    columnToShow: string[] | undefined
+  ) => {
     const newHeader: Set<string> = new Set<string>();
     data.forEach((element) =>
-      Object.keys(element).forEach((key) => newHeader.add(key))
+      Object.keys(element.data)
+        .filter((e) => (columnToShow ? columnToShow.includes(e) : true))
+        .sort((a, b) =>
+          columnToShow ? columnToShow.indexOf(a) - columnToShow.indexOf(b) : 0
+        )
+        .forEach((key) => newHeader.add(key))
     );
     setHeader([...newHeader]);
   };
@@ -77,16 +98,21 @@ export const TableCard = ({ data, title }: Props) => {
     return (
       <TableRow>
         {[
+          <StyledTableCell
+            key="icon"
+            padding="checkbox"
+            align="left"
+            style={{ borderRadius: "20px 0 0 20px" }}
+          />,
           ...header.map((element, index) => (
-            <StyledTableCell
-              align="left"
-              style={{ borderRadius: index === 0 ? "20px 0 0 20px" : 0 }}
-            >
-              {capitalizeFirstLetter(element)}
+            <StyledTableCell key={element + index} align="left">
+              {titleCase(element)}
             </StyledTableCell>
           )),
           <StyledTableCell
-            align="left"
+            key="icon"
+            padding="checkbox"
+            align="right"
             style={{ borderRadius: "0 20px 20px 0" }}
           />,
         ]}
@@ -94,44 +120,15 @@ export const TableCard = ({ data, title }: Props) => {
     );
   };
 
-  const buildRows = (data: any[], header: string[]) => {
+  const buildRows = (data: TableData, header: string[]) => {
     return data.map((element, index) => (
-      <StyledTableRow key={index}>
-        {[
-          ...header.map((key) => (
-            <StyledTableCell scope="row">
-              {isImage(element[key].toString()) ? (
-                <AnimatedTooltip
-                  placement="right"
-                  interactive
-                  content={
-                    <CardMedia
-                      component="img"
-                      image={element[key][0]}
-                      height="140"
-                    />
-                  }
-                >
-                  <img alt="guaca" src={element[key][0]} height={40} />
-                </AnimatedTooltip>
-              ) : (
-                ellipsisText(element[key].toString())
-              )}
-            </StyledTableCell>
-          )),
-          <StyledTableCell scope="row">
-            <IconButton style={{ padding: 7 }}>
-              <FeatherIcon icon="more-vertical" />
-            </IconButton>
-          </StyledTableCell>,
-        ]}
-      </StyledTableRow>
+      <Row key={index} element={element} header={header} onClick={onClick} />
     ));
   };
 
   useEffect(() => {
-    extractHeader(data);
-  }, [data]);
+    extractHeader(data, columnToShow);
+  }, [columnToShow, data]);
 
   return (
     <Card xs={12} sm={12} md={12}>
@@ -147,5 +144,65 @@ export const TableCard = ({ data, title }: Props) => {
         </Table>
       </TableContainer>
     </Card>
+  );
+};
+
+interface RowProps {
+  element: RowData;
+  header: string[];
+  onClick: (e: RowData) => void;
+}
+const Row = ({ element, header, onClick }: RowProps) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <StyledTableRow onClick={() => onClick(element)}>
+        {[
+          <StyledTableCell
+            padding="checkbox"
+            align="left"
+            scope="row"
+            key="icon"
+          >
+            {element.expandedData && (
+              <IconButton
+                style={{ padding: 7 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpen(!open);
+                }}
+              >
+                <FeatherIcon icon="chevron-down" />
+              </IconButton>
+            )}
+          </StyledTableCell>,
+          ...header.map((key) => (
+            <StyledTableCell scope="row" key={key}>
+              {element.data[key]}
+            </StyledTableCell>
+          )),
+          <StyledTableCell
+            padding="checkbox"
+            align="right"
+            scope="row"
+            key="icon"
+          >
+            <IconButton
+              style={{ padding: 7 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <FeatherIcon icon="more-vertical" />
+            </IconButton>
+          </StyledTableCell>,
+        ]}
+      </StyledTableRow>
+      {element.expandedData && (
+        <StyledTableRow>
+          <StyledTableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+            <Collapse in={open}>{element.expandedData}</Collapse>
+          </StyledTableCell>
+        </StyledTableRow>
+      )}
+    </>
   );
 };

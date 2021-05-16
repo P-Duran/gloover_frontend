@@ -1,10 +1,14 @@
 import { createMuiTheme } from "@material-ui/core";
-
+//7575FD
 export const themeLight = createMuiTheme({
   typography: {
-    fontFamily: "Nunito Sans, Roboto, sans-serif",
+    fontFamily: ["sans-serif"].join(","),
   },
   palette: {
+    purple: {
+      main: "#ff18ec",
+      light: "#ffe0fd",
+    },
     common: {
       black: "#4d4d4d",
     },
@@ -12,15 +16,20 @@ export const themeLight = createMuiTheme({
       default: "#fcfcfc",
     },
     primary: {
-      main: "#7575FD",
+      main: "#6060bf",
       light: "#BBBBFF",
     },
     secondary: {
       main: "#FFC107",
+      light: "#fff3cd",
     },
     success: {
       main: "#00AB55",
       light: "#D6F2E3",
+    },
+    info: {
+      main: "#1890ff",
+      light: "#ecf6ff",
     },
     error: {
       main: "#FF504A",
@@ -30,22 +39,23 @@ export const themeLight = createMuiTheme({
   overrides: {
     MuiListItem: {
       root: {
-        borderRadius: "0 10px 10px 0",
-        paddingBottom: 10,
+        borderRadius: "10px",
+        padding: 10,
+        marginBottom: 5,
         borderLeft: "3px solid transparent",
         "&$selected": {
-          backgroundColor: "transparent",
-          borderLeft: "3px solid #7575FD",
-          color: "#7575FD",
+          borderRadius: "10px",
+          backgroundColor: "#6060bf",
+          color: "white",
           "&:hover": {
-            backgroundColor: "rgb(117, 117, 253, 0.1)",
+            borderRadius: "10px",
+            backgroundColor: "#6060bf",
           },
         },
       },
       button: {
         "&:hover": {
           backgroundColor: "rgb(117, 117, 253, 0.1)",
-          borderLeft: "3px solid rgb(117, 117, 253, 0.4)",
         },
       },
     },
@@ -54,6 +64,10 @@ export const themeLight = createMuiTheme({
 
 export const themeDark = createMuiTheme({
   palette: {
+    purple: {
+      main: "#ff18ec",
+      light: "#ffe0fd",
+    },
     background: {
       default: "#222222",
     },
@@ -62,3 +76,12 @@ export const themeDark = createMuiTheme({
     },
   },
 });
+
+declare module "@material-ui/core/styles/createPalette" {
+  interface Palette {
+    purple: Palette["primary"];
+  }
+  interface PaletteOptions {
+    purple: PaletteOptions["primary"];
+  }
+}

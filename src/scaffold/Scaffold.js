@@ -9,13 +9,14 @@ import { drawerWidth } from 'constants/sizes';
 import { LateralMenu } from './components/LateralMenu';
 import { CustomAppBar } from 'scaffold/components/CustomAppBar';
 import { Dashboard } from 'pages/dashboard/Dashboard';
+import { ProductPage } from 'pages/product/ProductPage';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
   },
   drawer: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       width: drawerWidth,
       flexShrink: 0,
     },
@@ -52,7 +53,7 @@ function Scaffold({ window }) {
       <CustomAppBar handleDrawerToggle={handleDrawerToggle} />
       <nav className={classes.drawer} aria-label="mailbox folders">
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Hidden smUp implementation="css">
+        <Hidden mdUp implementation="css">
           <Drawer
             container={container}
             variant="temporary"
@@ -69,7 +70,7 @@ function Scaffold({ window }) {
             {drawer}
           </Drawer>
         </Hidden>
-        <Hidden xsDown implementation="css">
+        <Hidden smDown implementation="css">
           <Drawer
             classes={{
               paper: classes.drawerPaper,
@@ -85,7 +86,7 @@ function Scaffold({ window }) {
         <div className={classes.toolbar} />
         <Switch>
           <Route path="/dashboard">
-            <Dashboard></Dashboard>
+            <Dashboard />
           </Route>
           <Route path="/products">
             TODO Products
@@ -95,6 +96,12 @@ function Scaffold({ window }) {
           </Route>
           <Route path="/statistics">
             TODO Statistics
+          </Route>
+          <Route path="/model">
+            TODO model
+          </Route>
+          <Route path="/product">
+            <ProductPage />
           </Route>
           <Route path="/">
             <Redirect to="/dashboard" />

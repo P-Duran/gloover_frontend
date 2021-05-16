@@ -3,7 +3,9 @@
 import { ResponsivePie } from "@nivo/pie";
 import { Card } from "components/Card";
 import { Grow, Box, Typography, makeStyles } from "@material-ui/core";
-import { ChartTooltip } from "components/charts/ChartTooltip";
+import { PieChartTooltip } from "components/charts/tooltips/PieChartTooltip";
+import { PieData } from "types/ChartTypes";
+import { hashCode, intToRGB } from "utils/ColorUtils";
 
 const useStyles = makeStyles((theme) => ({
   chart: {
@@ -32,34 +34,42 @@ const CenteredMetric = ({ dataWithArc, centerX, centerY }: any) => {
       textAnchor="middle"
       dominantBaseline="central"
       style={{
-        fontSize: "40px",
+        fontSize: "50px",
         fontWeight: 500,
       }}
     >
-      {total}
+      {total.toLocaleString()}
     </text>
   );
 };
-export const PieCard = ({ data, title, subtitle }: any) => {
+
+interface Props {
+  data: PieData[];
+  title?: string;
+  subtitle?: string;
+}
+export const PieCard = ({ data, title, subtitle }: Props) => {
   const classes = useStyles();
   return (
     <Card xs={12} sm={12} md={3}>
       <div>
         <Box fontWeight={600} fontSize={20} textAlign="left">
-          Some Statistic
+          {title}
         </Box>
         <Typography variant="subtitle2" align="left">
-          (+43%) than last year
+          {subtitle}
         </Typography>
         <Grow in timeout={1500}>
           <Box className={classes.chart}>
             <ResponsivePie
               data={data}
               margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
-              innerRadius={0.8}
+              innerRadius={0.9}
               padAngle={2}
               cornerRadius={8}
-              colors={{ scheme: "blue_purple" }}
+              colors={(e) => {
+                return intToRGB(hashCode(String(e.label)));
+              }}
               borderWidth={1}
               borderColor={{ from: "color", modifiers: [["darker", 0.2]] }}
               enableRadialLabels={false}
@@ -77,7 +87,11 @@ export const PieCard = ({ data, title, subtitle }: any) => {
               ]}
               tooltip={function (e) {
                 return (
-                  <ChartTooltip data={e.datum.data} color={e.datum.color} />
+                  <PieChartTooltip
+                    key={e.datum.id}
+                    data={e.datum.data}
+                    color={e.datum.color}
+                  />
                 );
               }}
               legends={[]}

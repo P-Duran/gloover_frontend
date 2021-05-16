@@ -16,7 +16,7 @@ export function AppBarOptions({ buttons }: Props) {
   return (
     <Grid container justify="flex-end" spacing={1}>
       {buttons.map((button) => (
-        <Grid item>
+        <Grid item key={button.icon}>
           <motion.div whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.9 }}>
             <IconButton
               style={{

@@ -8,7 +8,6 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: "0px 2px 15px 1px rgba(0, 0, 0, 0.1)",
     padding: "20px 30px 20px 30px",
     scale: 0.2,
-    width: "100%",
     color: theme.palette.common.black,
   },
   tooltip: {

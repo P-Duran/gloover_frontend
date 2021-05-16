@@ -1,8 +1,18 @@
 // install (please make sure versions match peerDependencies)
 // yarn add @nivo/core @nivo/bump
-import { ResponsiveLine } from "@nivo/line";
+import { ResponsiveLine, Serie } from "@nivo/line";
 import { Card } from "components/Card";
-import { Fade, Box, Typography, makeStyles } from "@material-ui/core";
+import {
+  Fade,
+  Box,
+  Typography,
+  makeStyles,
+  Grid,
+  fade,
+} from "@material-ui/core";
+import { LineChartTooltip } from "./tooltips/LineChartTooltip";
+import { useState } from "react";
+import { hashCode, intToRGB } from "utils/ColorUtils";
 
 const useStyles = makeStyles((theme) => ({
   chart: {
@@ -18,97 +28,112 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-
-export const ChartCard = ({ data }: any) => {
+interface Props {
+  data: Serie[];
+  actions?: React.ReactNode;
+}
+export const ChartCard = ({ data, actions }: Props) => {
+  const [visibleId, setVisibleId] = useState<string>();
   const classes = useStyles();
+  const handleClick = (event: any) => {
+    setVisibleId(visibleId === event.id ? undefined : (event.id as string));
+  };
   return (
     <Card xs={12} sm={12} md={9}>
       <div>
-        <Box fontWeight={600} fontSize={20} textAlign="left">
-          Some Statistic
-        </Box>
-        <Typography variant="subtitle2" align="left">
-          (+43%) than last year
-        </Typography>
+        <Grid container direction="row">
+          <Grid item container direction="column" xs={6}>
+            <Box fontWeight={600} fontSize={20} textAlign="left">
+              Some Statistic
+            </Box>
+            <Typography variant="subtitle2" align="left">
+              (+43%) than last year
+            </Typography>
+          </Grid>
+          <Grid item xs={6}>
+            {actions}
+          </Grid>
+        </Grid>
         <Fade in timeout={1500}>
           <Box className={classes.chart}>
             <ResponsiveLine
               data={data}
-              colors={(data) => data.color}
-              margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
-              xScale={{ type: "point" }}
+              margin={{ top: 50, right: 160, bottom: 50, left: 60 }}
+              xScale={{
+                type: "time",
+                format: "%Y-%m-%dT%H:%M:%S.%L%Z",
+                useUTC: false,
+                precision: "day",
+              }}
+              xFormat="time:%d/%m/%Y"
               yScale={{
                 type: "linear",
-                min: "auto",
-                max: "auto",
                 stacked: false,
-                reverse: false,
               }}
-              yFormat=" >-.2f"
               curve="monotoneX"
-              enableSlices="x"
               axisTop={null}
-              axisRight={null}
-              xFormat="time:%Y-%m-%d"
-              axisBottom={{
-                orient: "bottom",
+              axisRight={{
+                tickValues: [0.0, 0.2, 0.4, 0.6, 0.8, 1.0],
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: "Time",
-                legendOffset: 36,
-                legendPosition: "middle",
+                format: "0.2",
+                legend: "",
+                legendOffset: 0,
+              }}
+              axisBottom={{
+                format: "%d/%m/%Y",
+                tickValues: 8,
+                legend: "time scale",
+                legendOffset: -12,
               }}
               axisLeft={{
-                orient: "left",
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: 0,
-                legend: "polarity",
-                legendOffset: -40,
-                legendPosition: "middle",
+                legend: "linear scale",
+                legendOffset: 12,
               }}
               enableGridX={false}
-              lineWidth={4}
-              pointSize={5}
-              pointColor={{ from: "color", modifiers: [] }}
-              pointBorderWidth={2}
+              colors={(e) =>
+                fade(
+                  intToRGB(hashCode(e.id)),
+                  e.id === visibleId || !visibleId ? 1 : 0.2
+                )
+              }
+              lineWidth={3}
+              pointSize={3}
+              pointColor={{ theme: "background" }}
+              pointBorderWidth={4}
               pointBorderColor={{ from: "serieColor" }}
+              enablePointLabel={false}
+              pointLabel="y"
               pointLabelYOffset={-12}
               useMesh={true}
-              tooltip={function (e) {
-                console.log(e);
-                return <>HOLA</>;
-              }}
-              markers={[
-                {
-                  axis: "x",
-                  value: data[0].data[7].x,
-                  lineStyle: { stroke: "#7575FD", strokeWidth: 2 },
-                  legend: "V1.1",
-                },
-                {
-                  axis: "x",
-                  value: data[0].data[2].x,
-                  lineStyle: { stroke: "#7575FD", strokeWidth: 2 },
-                  legend: "V1.0",
-                },
-              ]}
+              enableSlices={false}
+              tooltip={(e) =>
+                e.point.serieId === visibleId || !visibleId ? (
+                  <LineChartTooltip
+                    data={e.point}
+                    color={e.point.borderColor}
+                  />
+                ) : (
+                  <></>
+                )
+              }
               legends={[
                 {
                   anchor: "bottom-right",
                   direction: "column",
                   justify: false,
-                  translateX: 100,
+                  translateX: 140,
                   translateY: 0,
-                  itemsSpacing: 0,
+                  itemsSpacing: 2,
                   itemDirection: "left-to-right",
                   itemWidth: 80,
-                  itemHeight: 20,
+                  itemHeight: 12,
                   itemOpacity: 0.75,
                   symbolSize: 12,
                   symbolShape: "circle",
                   symbolBorderColor: "rgba(0, 0, 0, .5)",
+                  onClick: handleClick,
                   effects: [
                     {
                       on: "hover",
