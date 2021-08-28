@@ -22,6 +22,7 @@ export interface ProductFeatureSentence {
   end: number;
   polarity: number;
   sentence: string;
+  date: string;
 }
 
 export interface ProductFeatureSentencesStat {

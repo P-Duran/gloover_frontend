@@ -1,5 +1,5 @@
 import { Grid, Typography } from "@material-ui/core";
-import { Card } from "components/Card";
+import { Card } from "common/Card";
 import { PredictiveAnalysis } from "resources/UnDrawnVectors";
 
 export const WelcomeCard = () => {

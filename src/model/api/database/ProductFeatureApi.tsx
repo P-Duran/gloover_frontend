@@ -1,11 +1,11 @@
 import axios from "axios";
 import { RankingType } from "types/RankingTypes";
-
+const ip = "localhost"
 interface Parameters {
   product_asin?: string;
 }
 export const getProductFeatures = (params: Parameters) => {
-  return axios.get("http://localhost:5000/database/features", {
+  return axios.get("http://"+ip+":5000/database/features", {
     params: params,
   });
 };
@@ -16,7 +16,7 @@ interface Parameters {
 }
 export const getProductFeaturesSentencesStats = (params: Parameters) => {
   return axios.get(
-    "http://localhost:5000/database/features/sentences/statistics",
+    "http://"+ip+":5000/database/features/sentences/statistics",
     {
       params: params,
     }
@@ -28,9 +28,11 @@ interface Parameters {
   feature_id?: string;
   page?: number;
   limit?: number;
+  from_date?: string;
+  to_date?: string;
 }
 export const getProductFeatureSentences = (params: Parameters) => {
-  return axios.get("http://localhost:5000/database/features/sentences", {
+  return axios.get("http://"+ip+":5000/database/features/sentences", {
     params: params,
   });
 };

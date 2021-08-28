@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) => ({
       props.padding !== undefined ? props.padding : "20px 30px 20px 30px",
     textAlign: "center",
     height: (props: any) => props.height,
-    width: (props: any) => props.width,
+    width: (props: any) => props.width ?? "100%",
     borderRadius: 25,
     boxShadow: "0px 2px 15px 1px rgba(0, 0, 0, 0.1)",
   },

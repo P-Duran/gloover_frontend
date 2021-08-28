@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { drawerWidth } from "constants/sizes";
 import { AppBarOptions, AppBarButton } from "scaffold/components/AppBarOptions";
+import { SearchBar } from "./SearchBar";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -48,6 +49,7 @@ export function CustomAppBar({ handleDrawerToggle }: Props): JSX.Element {
         >
           <MenuIcon />
         </IconButton>
+        <SearchBar />
         <AppBarOptions buttons={options} />
       </Toolbar>
     </AppBar>

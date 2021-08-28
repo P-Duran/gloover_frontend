@@ -3,7 +3,7 @@ import {
   makeStyles,
   useTheme,
 } from "@material-ui/core";
-import { Card } from "components/Card";
+import { Card } from "common/Card";
 import { ResponsivePie } from "@nivo/pie";
 import { interpolateColors } from "utils/ColorUtils";
 import FeatherIcon from "feather-icons-react";

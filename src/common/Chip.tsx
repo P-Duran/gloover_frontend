@@ -15,7 +15,7 @@ const getSizes = (size: "small" | "medium" | "big" | undefined) => {
     case "big":
       return 50;
     default:
-      return;
+      return '100%';
   }
 };
 const useStyles = makeStyles((theme) => ({

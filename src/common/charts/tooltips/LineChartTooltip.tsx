@@ -27,15 +27,13 @@ export const LineChartTooltip = ({ data, color }: any) => {
         justify="space-between"
       >
         <Grid item>
-          <img
-            alt="img"
-            src={
-              Object.keys(products).length > 0
-                ? products[data.serieId].images[0]
-                : undefined
-            }
-            height="60"
-          />
+          {products[data.serieId] && (
+            <img
+              alt="img"
+              src={products[data.serieId]?.images[0]}
+              height="60"
+            />
+          )}
         </Grid>
         <Grid
           item

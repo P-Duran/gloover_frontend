@@ -1,4 +1,4 @@
-import { Card } from "components/Card";
+import { Card } from "common/Card";
 import {
   Table,
   TableContainer,
@@ -10,12 +10,10 @@ import {
   TableBody,
   Toolbar,
   Box,
-  CardMedia,
   Collapse,
 } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import { AnimatedTooltip } from "components/tootltip/AnimatedTooltip";
-import { titleCase, ellipsisText, isImage } from "utils/StringUtils";
+import { titleCase} from "utils/StringUtils";
 import { IconButton } from "@material-ui/core";
 import FeatherIcon from "feather-icons-react";
 import { RowData, TableData } from "types/TableCardTypes";

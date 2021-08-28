@@ -1,50 +1,22 @@
 import { Box, Grid, ListItem, useTheme } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
-import { PromiseBuilder, PromiseState } from "components/PromiseBuilder";
-import { motion, MotionConfigContext, useCycle } from "framer-motion";
+import { PromiseBuilder, PromiseState } from "common/PromiseBuilder";
 import { getReviewById } from "model/api/database/ReviewApi";
 import FeatherIcon from "feather-icons-react";
-import { useState } from "react";
 import { ProductFeatureSentence } from "types/ProductFeatureTypes";
-import { CircularIcon } from "components/CircularIcon";
+import { CircularIcon } from "common/CircularIcon";
+import { FlipCard } from "common/FlipCard";
 
 interface Props {
   sentence: ProductFeatureSentence;
 }
 
-enum Side {
-  FRONT = "FRONT",
-  BACK = "BACK",
-}
-
 export const SentenceReviewChanger = ({ sentence }: Props) => {
-  const [side, setSide] = useState(Side.FRONT);
-  const [inProgress, setInProgess] = useState(false);
-  const [animate, cycle] = useCycle(
-    { rotateY: 0 },
-    { rotateY: 90 },
-    { rotateY: 180 },
-    { rotateY: 90 }
-  );
   const theme = useTheme();
 
   return (
-    <motion.div
-      animate={animate}
-      transition={{ duration: 0.4 }}
-      onTap={() => !inProgress && cycle()}
-      onAnimationStart={() => setInProgess(true)}
-      onAnimationComplete={(data: any) => {
-        if (data.rotateY === 90) {
-          setSide(side === Side.FRONT ? Side.BACK : Side.FRONT);
-          cycle();
-        } else {
-          setInProgess(false);
-          setSide(data.rotateY === 180 ? Side.BACK : Side.FRONT);
-        }
-      }}
-    >
-      {side === Side.FRONT ? (
+    <FlipCard
+      front={
         <ListItem
           style={{
             backgroundColor:
@@ -59,7 +31,8 @@ export const SentenceReviewChanger = ({ sentence }: Props) => {
         >
           {sentence.sentence}
         </ListItem>
-      ) : (
+      }
+      back={
         <PromiseBuilder
           promise={getReviewById}
           params={{ id: sentence.review_id }}
@@ -112,7 +85,7 @@ export const SentenceReviewChanger = ({ sentence }: Props) => {
             }
           }}
         ></PromiseBuilder>
-      )}
-    </motion.div>
+      }
+    ></FlipCard>
   );
 };

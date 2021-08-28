@@ -1,5 +1,5 @@
 import { IconButton } from "@material-ui/core";
-import { ChartCard } from "components/charts/ChartCard";
+import { ChartCard } from "common/charts/ChartCard";
 import { GlobalContext } from "context/GlobalContextProvider";
 import { getReviews } from "model/api/database/ReviewApi";
 import { useEffect, useState, useContext } from "react";

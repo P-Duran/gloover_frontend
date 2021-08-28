@@ -9,6 +9,10 @@ export const themeLight = createMuiTheme({
       main: "#ff18ec",
       light: "#ffe0fd",
     },
+    orange: {
+      main: "#ff5d18",
+      light: "#ff5d18",
+    },
     common: {
       black: "#4d4d4d",
     },
@@ -68,6 +72,10 @@ export const themeDark = createMuiTheme({
       main: "#ff18ec",
       light: "#ffe0fd",
     },
+    orange: {
+      main: "#ff18ec",
+      light: "#ffe0fd",
+    },
     background: {
       default: "#222222",
     },
@@ -80,8 +88,10 @@ export const themeDark = createMuiTheme({
 declare module "@material-ui/core/styles/createPalette" {
   interface Palette {
     purple: Palette["primary"];
+    orange: Palette["primary"];
   }
   interface PaletteOptions {
     purple: PaletteOptions["primary"];
+    orange: PaletteOptions["primary"];
   }
 }

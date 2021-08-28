@@ -1,8 +1,8 @@
 import { Divider, Grid, Typography, makeStyles } from "@material-ui/core";
-import { Card } from "components/Card";
+import { Card } from "common/Card";
 import { Product } from "types/ProductTypes";
 import Rating from "@material-ui/lab/Rating";
-import { AnimatedTooltip } from "components/tootltip/AnimatedTooltip";
+import { AnimatedTooltip } from "common/tootltip/AnimatedTooltip";
 import { ellipsisText } from "utils/StringUtils";
 
 const useStyles = makeStyles((theme) => ({
@@ -49,7 +49,7 @@ export const ProductImageCard = ({ product }: Props) => {
                   value={product.rating}
                 />
               </AnimatedTooltip>
-              <Divider orientation="vertical" style={{margin: 10}}/>
+              <Divider orientation="vertical" style={{ margin: 10 }} />
               <Typography
                 variant="h6"
                 align="left"
@@ -65,9 +65,9 @@ export const ProductImageCard = ({ product }: Props) => {
             <Typography
               variant="body2"
               align="left"
-              style={{ color: "#3f3d56"}}
+              style={{ color: "#3f3d56" }}
             >
-              {ellipsisText(product.product_description, 1000, 400)}
+              {ellipsisText(product.product_description, 1000, 400, true)}
             </Typography>
           </Grid>
           <Grid item xs={12} md={4} style={{ height: "100%", padding: 5 }}>

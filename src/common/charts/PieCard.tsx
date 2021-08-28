@@ -1,9 +1,9 @@
 // install (please make sure versions match peerDependencies)
 // yarn add @nivo/core @nivo/bump
 import { ResponsivePie } from "@nivo/pie";
-import { Card } from "components/Card";
+import { Card } from "common/Card";
 import { Grow, Box, Typography, makeStyles } from "@material-ui/core";
-import { PieChartTooltip } from "components/charts/tooltips/PieChartTooltip";
+import { PieChartTooltip } from "common/charts/tooltips/PieChartTooltip";
 import { PieData } from "types/ChartTypes";
 import { hashCode, intToRGB } from "utils/ColorUtils";
 

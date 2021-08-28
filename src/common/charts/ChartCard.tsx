@@ -1,7 +1,7 @@
 // install (please make sure versions match peerDependencies)
 // yarn add @nivo/core @nivo/bump
 import { ResponsiveLine, Serie } from "@nivo/line";
-import { Card } from "components/Card";
+import { Card } from "common/Card";
 import {
   Fade,
   Box,

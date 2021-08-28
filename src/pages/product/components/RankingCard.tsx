@@ -14,8 +14,8 @@ import {
 } from "@material-ui/core";
 import { PaletteColor } from "@material-ui/core/styles/createPalette";
 import { Skeleton } from "@material-ui/lab";
-import { Card } from "components/Card";
-import { AnimatedTooltip } from "components/tootltip/AnimatedTooltip";
+import { Card } from "common/Card";
+import { AnimatedTooltip } from "common/tootltip/AnimatedTooltip";
 import FeatherIcon from "feather-icons-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -135,7 +135,7 @@ export const RankingCard = ({
   };
 
   return (
-    <Card xs={12} sm={12} md={4} style={{minHeight: 355}}>
+    <Card xs={12} sm={12} md={4} style={{ minHeight: 355 }}>
       <Grid container justify="space-between" alignItems="center">
         <Grid item container xs={10} alignItems="center">
           <AnimatedTooltip content={rankingTooltip}>

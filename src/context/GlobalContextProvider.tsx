@@ -8,6 +8,7 @@ interface Context {
   products: Record<string, Product>;
   reviews: ReviewsInformation;
 }
+
 interface Props {
   children: JSX.Element;
 }
@@ -35,6 +36,7 @@ export const GlobalContextProvider = ({ children }: Props) => {
         stats: reviewStatsResponse.data.items as ReviewStat[],
       };
       setContext({
+        ...context,
         products: productResponse.data.items as Record<string, Product>,
         reviews: ReviewsInfo,
       });

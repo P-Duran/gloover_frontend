@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: theme.typography.pxToRem(15),
   },
 }));
+
 interface Props {
   children: JSX.Element | string;
   content: any;

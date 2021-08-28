@@ -1,12 +1,13 @@
-import { Canvas } from "components/layout/Canvas";
+import { Canvas } from "common/layout/Canvas";
 import { GlobalContext } from "context/GlobalContextProvider";
 import { useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { ProductInfoCard } from "./components/ProductInfoCard";
 import { RankingCard } from "./components/RankingCard";
 import FeatherIcon from "feather-icons-react";
-import { Grid, List, ListItem, useTheme } from "@material-ui/core";
+import { Fab, Grid, List, makeStyles, useTheme } from "@material-ui/core";
 import { ProductImageCard } from "./components/ProductImageCard";
+import { motion } from "framer-motion";
 import {
   getProductFeatures,
   getProductFeatureSentences,
@@ -20,13 +21,31 @@ import {
 } from "types/ProductFeatureTypes";
 import { titleCase } from "utils/StringUtils";
 import { RankingType } from "types/RankingTypes";
-import { Chip } from "components/Chip";
-import { AnimatedTooltip } from "components/tootltip/AnimatedTooltip";
-import { TableCard } from "components/table/TableCard";
+import { Chip } from "common/Chip";
+import { AnimatedTooltip } from "common/tootltip/AnimatedTooltip";
+import { TableCard } from "common/table/TableCard";
 import { transformToTableData } from "utils/TableUtils";
-import { PromiseBuilder, PromiseState } from "components/PromiseBuilder";
+import { PromiseBuilder, PromiseState } from "common/PromiseBuilder";
 import { Skeleton } from "@material-ui/lab";
 import { SentenceReviewChanger } from "./components/SentenceReviewChanger";
+import { Statister } from "pages/product/components/Statistier/Statister";
+
+const useStyles = makeStyles((theme) => ({
+  floatingButton: {
+    margin: 0,
+    top: "auto",
+    right: 20,
+    bottom: 20,
+    left: "auto",
+    position: "fixed",
+  },
+  center: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    alignContent: "center",
+  },
+}));
 
 export const ProductPage = () => {
   const [features, setFeatures] = useState<ProductFeature[]>([]);
@@ -38,6 +57,8 @@ export const ProductPage = () => {
   const theme = useTheme();
   const params = new URLSearchParams(history.location.search);
   const id = params.get("id");
+  const classes = useStyles();
+
   const checkCorrectId = (id: string | null) => {
     return (
       id !== null &&
@@ -81,6 +102,8 @@ export const ProductPage = () => {
   };
 
   useEffect(() => {
+    setFeatures([]);
+    setFeaturesStats([]);
     if (id !== null) {
       getProductFeatures({ product_asin: id as string })
         .then((result) => setFeatures(result.data.items as ProductFeature[]))
@@ -183,6 +206,27 @@ export const ProductPage = () => {
           }
         ></RankingCard>
         {featureStats.length > 0 ? (
+          <Statister
+            items={features.map((feature) => {
+              const featureStat = featureStats.filter(
+                (f) => feature.id === f.feature_id
+              )[0];
+              return {
+                id: feature.id,
+                title: feature.word,
+                data: {
+                  score: featureStat.score,
+                  positiviness:
+                    (featureStat.positive * 100) /
+                    (featureStat.positive + featureStat.negative),
+                },
+              };
+            })}
+          ></Statister>
+        ) : (
+          <></>
+        )}
+        {featureStats.length > 0 ? (
           <TableCard
             data={transformToTableData(features)
               .map((row) => {
@@ -255,7 +299,22 @@ export const ProductPage = () => {
             columnToShow={["score", "word", "appearances", "positiviness"]}
           ></TableCard>
         ) : (
-          <></>
+          <motion.div
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className={classes.floatingButton}
+          >
+            <Fab color="primary">
+              <AnimatedTooltip
+                content="Refresh the features for this product"
+                disableChildrenAnimation
+              >
+                <div className={classes.center}>
+                  <FeatherIcon icon="refresh-ccw" />
+                </div>
+              </AnimatedTooltip>
+            </Fab>
+          </motion.div>
         )}
       </Canvas>
     )

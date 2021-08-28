@@ -1,4 +1,4 @@
-import { Card } from "components/Card";
+import { Card } from "common/Card";
 import {
   Grid,
   GridSize,
@@ -9,8 +9,8 @@ import {
   Grow,
 } from "@material-ui/core";
 import FeatherIcon from "feather-icons-react";
-import { AnimatedCounter } from "components/counter/AnimatedCounter";
-import { AnimatedTooltip } from "components/tootltip/AnimatedTooltip";
+import { AnimatedCounter } from "common/counter/AnimatedCounter";
+import { AnimatedTooltip } from "common/tootltip/AnimatedTooltip";
 
 const useStyles = makeStyles((theme) => ({
   growing: {
